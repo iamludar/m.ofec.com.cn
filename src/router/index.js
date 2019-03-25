@@ -16,6 +16,7 @@ const detail = () => import('@/page/detail/detail')
 const search = () => import('@/page/search/search')
 
 export default new Router({
+    mode: 'history',
     routes: [
         {
             path: '',

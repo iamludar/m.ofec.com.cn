@@ -114,13 +114,11 @@ export default {
             .then(res => {
                 if (res) {
                     this.articleJson = res
-                    console.log(this.articleJson)
                     this.articleJson.jsontext = this.replaceAll(this.articleJson.body.und[0].value)
                     this.handleLocaltion('get')
                     const that = this
-                    axios.post('http://ofec.04wu.com/wechatshare')
+                    axios.post('http://ofec.04wu.com/wechatshare?url=' + window.location.href)
                     .then(res => {
-                        console.log(res.data)
                         wx.config({
                             debug: false, // 开启调试模式,
                             appId: res.data.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
@@ -130,12 +128,11 @@ export default {
                             jsApiList: ['onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
                         })
                     })
-                    console.log('这个是分享的链接 + window.location.href.split('#')[0] + '#' + window.location.href.split('#')[1])
                     wx.ready(function() {
                         wx.onMenuShareAppMessage({
                             title: that.articleJson.title, // 分享标题
-                            desc: that.articleJson.body.und[0].value.replace(/<[^>]+>/g,""), // 分享描述
-                            link: window.location.href.split('#')[0] + '#' + window.location.href.split('#')[1], // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+                            desc: that.articleJson.body.und[0].value.replace(/<[^>]+>/g, ''), // 分享描述
+                            link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
                             imgUrl: 'http://www.ofec.com.cn/sites/default/files/styles/120_80/public/' + that.articleJson.field_feng_mian.und[0].filename, // 分享图标
                             type: '', // 分享类型,music、video或link，不填默认为link
                             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
@@ -181,7 +178,6 @@ export default {
     },
     mounted() {
         this.init()
-        console.log(wx)
     },
     // 离开路由钩子
     beforeRouteLeave(to, from, next) {
