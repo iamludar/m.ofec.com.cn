@@ -1,8 +1,8 @@
 <template>
     <div id="detail">
         <my-header fixed :title='title' v-goTop:click='true'>
-            <a slot="left" class="back-black" @click.stop='$router.go(-1)'></a>
-            <a slot="right" class="menu" @click.stop='$refs.share.toggle()'></a>
+            <a slot="left" class="back-black" @click.stop='$router.push("/")'></a>
+            <!--<a slot="right" class="menu" @click.stop='$refs.share.toggle()'></a>-->
         </my-header>
         
         <div class="content">
@@ -117,7 +117,7 @@ export default {
                     this.articleJson.jsontext = this.replaceAll(this.articleJson.body.und[0].value)
                     this.handleLocaltion('get')
                     const that = this
-                    axios.post('http://ofec.04wu.com/wechatshare?url=' + window.location.href)
+                    axios.post('http://ofec.04wu.com/wechatshare?url=' + encodeURIComponent(window.location.href))
                     .then(res => {
                         wx.config({
                             debug: false, // 开启调试模式,
@@ -133,7 +133,7 @@ export default {
                             title: that.articleJson.title, // 分享标题
                             desc: that.articleJson.body.und[0].value.replace(/<[^>]+>/g, ''), // 分享描述
                             link: window.location.href, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-                            imgUrl: 'http://www.ofec.com.cn/sites/default/files/styles/120_80/public/' + that.articleJson.field_feng_mian.und[0].filename, // 分享图标
+                            imgUrl: 'http://www.ofec.com.cn/sites/default/files/' + that.articleJson.field_feng_mian.und[0].uri.slice(9), // 分享图标
                             type: '', // 分享类型,music、video或link，不填默认为link
                             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
                             success: function () {
@@ -271,6 +271,10 @@ export default {
     .bg_line {
         height: 0.1333rem;
         background: #eee;
+    }
+    .top_bar{
+        background:#337ab7;
+        color:white;
     }
 }
 </style>

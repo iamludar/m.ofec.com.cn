@@ -46,9 +46,13 @@
                 <div class='content_moreBtn' v-if="content_more" @click.stop="content_more = false">展开全文...</div>
             </section>
         </template>
+        <div style="text-align:center"><img src="../../../assets/img/erweima.jpg" style="margin-bottom: 10px;"></div>
+        <mt-cell title="扩展阅读"></mt-cell>
+        <list-item :itemJson="contentJson" v-if='contentJson.length > 0'/>
     </article>
 </template>
 <script>
+import axios from 'axios'
 export default {
     props: ['json'],
     filters: {
@@ -106,6 +110,7 @@ export default {
     },
     data() {
         return {
+            contentJson: [],
             video: '',              // video元素
             video_poster: true,     // video封面
             video_playing: false,   // video是否播放
@@ -187,6 +192,11 @@ export default {
         }
     },
     mounted() {
+        axios.get('http://www.ofec.com.cn/fenlei/news0.json')
+        .then(res => {
+            this.contentJson = res.data
+            console.log(res)
+        })
         this.backTo()
     }
 }
@@ -342,11 +352,9 @@ export default {
                 width: initial!important;
             }
             *{
-                text-indent: inherit !important;
                 font-size: inherit !important;
                 font-family: inherit !important;
                 line-height: inherit !important;
-                text-align: justify !important;
             }
             div,p{
                 width: 100% !important;
